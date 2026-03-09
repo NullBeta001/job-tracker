@@ -6,6 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import PasswordStrength, { getPasswordStrength } from "@/components/PasswordStrength";
 import { GoogleIcon } from "@/components/Icons";
+import OfferlyLogo from "@/components/OfferlyLogo";
 
 const inputClass =
   "w-full bg-input-bg border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
@@ -54,8 +55,11 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="max-w-sm w-full">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-foreground">Create Account</h1>
-          <p className="text-sm text-muted-foreground mt-1">Start tracking your job applications</p>
+          <div className="flex items-center justify-center gap-2.5 mb-1">
+            <OfferlyLogo size={36} />
+            <h1 className="text-2xl font-bold text-foreground">Offerly</h1>
+          </div>
+          <p className="text-sm text-muted-foreground mt-1">Create your account</p>
         </div>
 
         <div className="bg-card rounded-xl border border-border shadow-sm p-6">

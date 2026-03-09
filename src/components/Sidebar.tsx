@@ -17,6 +17,7 @@ import {
   MenuIcon,
   XMarkIcon,
 } from "@/components/Icons";
+import OfferlyLogo from "@/components/OfferlyLogo";
 import { ReactNode, useState, useEffect, useCallback } from "react";
 
 const navItems: { href: string; label: string; icon: ReactNode }[] = [
@@ -35,6 +36,7 @@ export default function Sidebar() {
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     closeMobile();
   }, [pathname, closeMobile]);
 
@@ -56,9 +58,12 @@ export default function Sidebar() {
   const sidebarContent = (
     <>
       <div className="px-5 py-5 border-b border-sidebar-border flex items-center justify-between">
-        <div>
-          <h1 className="text-base font-bold text-white tracking-tight">JobTracker</h1>
-          <p className="text-[11px] text-slate-400 mt-0.5">Career CRM</p>
+        <div className="flex items-center gap-2.5">
+          <OfferlyLogo size={28} />
+          <div>
+            <h1 className="text-base font-bold text-white tracking-tight">Offerly</h1>
+            <p className="text-[11px] text-slate-400 mt-0.5">Career CRM</p>
+          </div>
         </div>
         <button
           onClick={closeMobile}
@@ -75,11 +80,10 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
                   ? "bg-blue-600 text-white"
                   : "text-slate-400 hover:bg-sidebar-hover hover:text-white"
-              }`}
+                }`}
             >
               {item.icon}
               {item.label}
@@ -94,11 +98,10 @@ export default function Sidebar() {
             <button
               key={opt.value}
               onClick={() => setTheme(opt.value)}
-              className={`flex-1 flex items-center justify-center py-1.5 rounded-md transition-colors ${
-                theme === opt.value
+              className={`flex-1 flex items-center justify-center py-1.5 rounded-md transition-colors ${theme === opt.value
                   ? "bg-blue-600 text-white"
                   : "text-slate-400 hover:text-white"
-              }`}
+                }`}
               title={opt.label}
             >
               {opt.icon}
@@ -127,14 +130,16 @@ export default function Sidebar() {
         >
           <MenuIcon className="w-6 h-6" />
         </button>
-        <span className="text-sm font-bold text-white ml-3">JobTracker</span>
+        <div className="flex items-center gap-2 ml-3">
+          <OfferlyLogo size={22} />
+          <span className="text-sm font-bold text-white">Offerly</span>
+        </div>
       </div>
 
       {/* Mobile backdrop - always in DOM, animated via opacity */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${
-          mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         onClick={closeMobile}
       />
 
