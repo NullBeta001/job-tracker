@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String          @id @default(cuid())
+  name           String?
+  email          String          @unique
+  hashedPassword String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  openaiApiKey   String?
+  profile        Profile?
+  applications   JobApplication[]
+  accounts       Account[]
+  sessions       Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Profile {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  name                   String?
+  yearsOfExperience      Int?
+  primaryStack           String[] @default([])
+  secondaryStack         String[] @default([])
+  preferredRoles         String[] @default([])
+  englishLevel           String?
+  preferredSalaryMin     Int?
+  preferredSalaryMax     Int?
+  remotePreference       String?
+  preferredCompanyStage  String?
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model JobApplication {
+  id              String      @id @default(cuid())
+  userId          String
+  companyName     String
+  roleTitle       String
+  salaryMin       Int?
+  salaryMax       Int?
+  location        String?
+  remoteType      String?
+  jobDescription  String?
+  techStack       String[]    @default([])
+  source          String?
+  jobUrl          String?
+  dateApplied     DateTime    @default(now())
+  status          String      @default("Applied")
+  fitScore        Int?
+  lastContactDate DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes           Note[]
+  interviews      Interview[]
+}
+
+model Note {
+  id              String         @id @default(cuid())
+  applicationId   String
+  type            String         @default("note")
+  content         String
+  createdAt       DateTime       @default(now())
+  application     JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
+
+model Interview {
+  id              String         @id @default(cuid())
+  applicationId   String
+  interviewDate   DateTime
+  stage           String
+  meetingLink     String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  application     JobApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
