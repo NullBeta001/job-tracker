@@ -11,6 +11,7 @@ model User {
   id             String          @id @default(cuid())
   name           String?
   email          String          @unique
+  image          String?
   hashedPassword String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -51,10 +52,19 @@ model Profile {
   id                     String   @id @default(cuid())
   userId                 String   @unique
   name                   String?
+  bio                    String?
+  currentRole            String?
+  currentCompany         String?
+  location               String?
+  phone                  String?
+  linkedinUrl            String?
+  portfolioUrl           String?
   yearsOfExperience      Int?
   primaryStack           String[] @default([])
   secondaryStack         String[] @default([])
   preferredRoles         String[] @default([])
+  certifications         String[] @default([])
+  education              String[] @default([])
   englishLevel           String?
   preferredSalaryMin     Int?
   preferredSalaryMax     Int?

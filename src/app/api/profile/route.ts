@@ -15,10 +15,14 @@ export async function GET() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { openaiApiKey: true },
+    select: { openaiApiKey: true, image: true },
   });
 
-  return NextResponse.json({ ...profile, openaiApiKey: user?.openaiApiKey || null });
+  return NextResponse.json({
+    ...profile,
+    openaiApiKey: user?.openaiApiKey || null,
+    userImage: user?.image || null,
+  });
 }
 
 export async function PUT(req: Request) {

@@ -49,10 +49,15 @@ export const authOptions: NextAuthOptions = {
 
         if (!dbUser) {
           dbUser = await prisma.user.create({
-            data: { email, name: user.name },
+            data: { email, name: user.name, image: user.image },
           });
           await prisma.profile.create({
-            data: { userId: dbUser.id },
+            data: { userId: dbUser.id, name: user.name },
+          });
+        } else if (user.image) {
+          await prisma.user.update({
+            where: { id: dbUser.id },
+            data: { image: user.image, name: dbUser.name || user.name },
           });
         }
 
@@ -90,15 +95,24 @@ export const authOptions: NextAuthOptions = {
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
         });
-        if (dbUser) token.id = dbUser.id;
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.picture = dbUser.image;
+        }
       } else if (user) {
         token.id = user.id;
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { image: true },
+        });
+        token.picture = dbUser?.image;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as { id: string }).id = token.id as string;
+        (session.user as { id: string; image?: string | null }).id = token.id as string;
+        (session.user as { id: string; image?: string | null }).image = token.picture as string | null;
       }
       return session;
     },
